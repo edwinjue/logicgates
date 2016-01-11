@@ -42,10 +42,16 @@ module And
       end
     end
     def method_missing(name,*args, &block)
+      super unless name.to_s.split('_').length == 2 #send up inheritance heirarchy if name is invalid
+      variable_name = name.to_s.split('_')[0]
       variable = '@' + name.to_s.split('_')[1].gsub(/\=/,'')
-      instance_variable_set(variable,args[0])
-      @variables << variable
-      process unless name == "total"  #for some reason total appears as a missing method, skip it
+      if variable_name == 'input'
+        instance_variable_set(variable,args[0])
+        @variables << variable
+        process unless name == "total"  #for some reason total appears as a missing method, skip it
+      else
+        super
+      end
     end
   end
 end
@@ -79,7 +85,7 @@ module Or
       @sum = 0
       @num = num
     end
-    def process(vars)
+    def process
       @sum = 0
       @total = @variables.length
       @variables.each.with_index{|var|
@@ -94,10 +100,16 @@ module Or
       end
     end
     def method_missing(name,*args, &block)
+      super unless name.to_s.split('_').length == 2 #send up inheritance heirarchy if name is invalid
+      variable_name = name.to_s.split('_')[0]
       variable = '@' + name.to_s.split('_')[1].gsub(/\=/,'')
-      instance_variable_set(variable,args[0])
-      @variables << variable
-      process unless name == "total"  #for some reason total appears as a missing method, skip it
+      if variable_name == 'input'
+        instance_variable_set(variable,args[0])
+        @variables << variable
+        process unless name == "total"  #for some reason total appears as a missing method, skip it
+      else
+        super
+      end
     end
   end
 end
