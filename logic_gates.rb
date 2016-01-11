@@ -48,7 +48,7 @@ module And
       if variable_name == 'input'
         instance_variable_set(variable,args[0])
         @variables << variable
-        process unless name == "total"  #for some reason total appears as a missing method, skip it
+        process
       else
         super
       end
@@ -106,7 +106,7 @@ module Or
       if variable_name == 'input'
         instance_variable_set(variable,args[0])
         @variables << variable
-        process unless name == "total"  #for some reason total appears as a missing method, skip it
+        process
       else
         super
       end
