@@ -27,15 +27,12 @@ module And
       @sum = 0
       @num = num
     end
-    def process(vars)
+    def process
       @sum = 0
-      @total = vars.length
-      #puts "total = #{total}"
-      vars.each.with_index{|val|
-        #puts "val = #{val} = #{instance_variable_get(val)}" 
+      @total = @variables.length
+      @variables.each.with_index{|val|
         @sum += instance_variable_get(val)
       }
-      #puts "sum = #{@sum}"
     end
     def output
       if @num == @total
@@ -45,13 +42,10 @@ module And
       end
     end
     def method_missing(name,*args, &block)
-
-      #puts " #{name} was called "
-      #puts "name = #{name}"
       variable = '@' + name.to_s.split('_')[1].gsub(/\=/,'')
       instance_variable_set(variable,args[0])
       @variables << variable
-      process(@variables) if name != "total"
+      process unless name == "total"
     end
 	end
 end
@@ -87,13 +81,10 @@ module Or
     end
     def process(vars)
       @sum = 0
-      @total = vars.length
-      #puts "total = #{total}"
-      vars.each.with_index{|val|
-        #puts "val = #{val} = #{instance_variable_get(val)}" 
+      @total = @variables.length
+      @variables.each.with_index{|val|
         @sum += instance_variable_get(val)
       }
-      #puts "sum = #{@sum}"
     end
     def output
       if @num == @total
@@ -103,13 +94,10 @@ module Or
       end
     end
     def method_missing(name,*args, &block)
-
-      #puts " #{name} was called "
-      #puts "name = #{name}"
       variable = '@' + name.to_s.split('_')[1].gsub(/\=/,'')
       instance_variable_set(variable,args[0])
       @variables << variable
-      process(@variables) if name != "total"
+      process unless name == "total"
     end
   end
 end
